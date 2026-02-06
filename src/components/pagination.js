@@ -10,12 +10,13 @@ export const initPagination = ({pages, fromRow, toRow, totalRows}, createPage) =
         // @todo: #2.1 — посчитать количество страниц, объявить переменные и константы
 
         const rowsPerPage = state.rowsPerPage;
-        const pageCount = Math.ceil(data.lenght / rowsPerPage);
+        const pageCount = Math.ceil(data.length / rowsPerPage);
         let page = state.page;
 
         // @todo: #2.6 — обработать действия
 
         if (action) switch (action.name) {
+            case 'page': page = Number(action.value) || 1; break;
             case 'prev': page = Math.max(1, page - 1); break;
             case 'next': page = Math.min(pageCount, page + 1); break;
             case 'first': page = 1; break;
@@ -32,14 +33,14 @@ export const initPagination = ({pages, fromRow, toRow, totalRows}, createPage) =
 
         // @todo: #2.5 — обновить статус пагинации
 
-        if (data.lenght === 0) {
+        if (data.length === 0) {
             fromRow.textContent = 0;
             toRow.textContent = 0;
             totalRows.textContent = 0;
         } else {
             fromRow.textContent = (page - 1) * rowsPerPage + 1;
-            toRow.textContent = Math.min(page * rowsPerPage, data.lenght);
-            totalRows.textContent = data.lenght;
+            toRow.textContent = Math.min(page * rowsPerPage, data.length);
+            totalRows.textContent = data.length;
         }
 
         // @todo: #2.2 — посчитать сколько строк нужно пропустить и получить срез данных

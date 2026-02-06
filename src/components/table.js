@@ -25,7 +25,7 @@ export function initTable(settings, onAction) {
 
     // @todo: #1.3 —  обработать события и вызвать onAction()
 
-    root.container.addEventListener('change', () => onAction());
+    root.container.addEventListener('change', (e) => onAction(e.target));
     root.container.addEventListener('reset', () => setTimeout(onAction));
     root.container.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -48,6 +48,7 @@ export function initTable(settings, onAction) {
                     el.textContent = item[key];
                 }
             });
+            return row.container;
         });
         root.elements.rows.replaceChildren(...nextRows);
     }
