@@ -12,6 +12,8 @@ export const initPagination = ({pages, fromRow, toRow, totalRows}, createPage) =
         const rowsPerPage = state.rowsPerPage;
         const pageCount = Math.ceil(data.length / rowsPerPage);
         let page = state.page;
+        const safePageCount = Math.max(1, pageCount);
+        page = Math.min(Math.max(1, page), safePageCount);
 
         // @todo: #2.6 — обработать действия
 
@@ -37,6 +39,8 @@ export const initPagination = ({pages, fromRow, toRow, totalRows}, createPage) =
             fromRow.textContent = 0;
             toRow.textContent = 0;
             totalRows.textContent = 0;
+            pages.replaceChildren();
+            return [];
         } else {
             fromRow.textContent = (page - 1) * rowsPerPage + 1;
             toRow.textContent = Math.min(page * rowsPerPage, data.length);
