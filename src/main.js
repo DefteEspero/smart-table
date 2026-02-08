@@ -24,8 +24,10 @@ const {data, ...indexes} = initData(sourceData);
 function collectState() {
     const state = processFormData(new FormData(sampleTable.container));
 
-    const rowsPerPage = Number(state.rowsPerPage);
-    const page = Number.isFinite(state.page ?? 1);
+    const rowsPerPage = Number(state.rowsPerPage) || 10;
+
+    const pageRaw = Number(state.page);
+    const page = Number.isFinite(pageRaw) && pageRaw > 0 ? pageRaw : 1;
 
     return {
         ...state, rowsPerPage, page
