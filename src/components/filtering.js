@@ -23,7 +23,7 @@ export function initFiltering(elements, indexes) {
 
         if (action && action.name === 'clear') {
             const field = action.dataset.field;
-            const wrapper = action.preventElement;
+            const wrapper = action.parentElement;
             const input = wrapper?.querySelector('input');
             if (input) {
                 input.value = '';
@@ -33,7 +33,15 @@ export function initFiltering(elements, indexes) {
             }
         }
 
+        const from = state.totalFrom ? parseFloat(state.totalFrom) : '';
+        const to = state.totalTo ? parseFloat(state.totalTo) : '';
+
+        const nextState = {
+            ...state,
+            total: [from, to],
+        };
+
         // @todo: #4.5 — отфильтровать данные используя компаратор
-        return data.filter((row) => compare(row, state));
+        return data.filter((row) => compare(row, nextState));
     }
 }
