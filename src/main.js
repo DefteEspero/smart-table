@@ -14,9 +14,6 @@ import { initSorting } from "./components/sorting.js";
 import { initFiltering } from "./components/filtering.js";
 import { initSearching } from "./components/searching.js";
 
-// Исходные данные используемые в render()
-const {data, ...indexes} = initData(sourceData);
-
 /**
  * Сбор и обработка полей из таблицы
  * @returns {Object}
@@ -39,15 +36,14 @@ function collectState() {
  * @param {HTMLButtonElement?} action
  */
 function render(action) {
-    let state = collectState(); // состояние полей из таблицы
-    let result = [...data]; // копируем для последующего изменения
-    // @todo: использование
-    result = applySearching(result, state, action);
-    result = applyFiltering(result, state, action);
-    result = applySorting(result, state, action);
-    result = applyPagination(result, state, action);
+    let state = collectState();
+    let query  = {}; 
+    query  = applySearching(query, state, action);
+    query  = applyFiltering(query, state, action);
+    query  = applySorting(query, state, action);
+    query  = applyPagination(query, state, action);
 
-    sampleTable.render(result)
+    sampleTable.render(items);
 }
 
 const sampleTable = initTable({
@@ -76,14 +72,19 @@ const applySorting = initSorting([
     sampleTable.header.elements.sortByTotal
 ]);
 
-const applyFiltering = initFiltering(
-    sampleTable.filter.elements, {
-    searchBySeller: indexes.sellers
-});
+let applyFiltering = (query) => query;
 
-const applySearching = initSearching('search');
+const applySearching = initSearching('query');
 
 const appRoot = document.querySelector('#app');
 appRoot.appendChild(sampleTable.container);
 
-render();
+async function init() {
+    const api = initData();
+    const indexes = await api.getIndexes();
+    applyFiltering = initFiltering(sampleTable.filter.elements, {
+        searchBySeller: indexes.sellers
+    });
+}
+
+init().then(render);
