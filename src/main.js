@@ -14,6 +14,7 @@ import { initSorting } from "./components/sorting.js";
 import { initFiltering } from "./components/filtering.js";
 import { initSearching } from "./components/searching.js";
 
+const api = initData(sourceData);
 /**
  * Сбор и обработка полей из таблицы
  * @returns {Object}
@@ -35,14 +36,17 @@ function collectState() {
  * Перерисовка состояния таблицы при любых изменениях
  * @param {HTMLButtonElement?} action
  */
-function render(action) {
+async function render(action) {
     let state = collectState();
-    let query  = {}; 
+    let query  = {};
     query  = applySearching(query, state, action);
     query  = applyFiltering(query, state, action);
     query  = applySorting(query, state, action);
-    query  = applyPagination(query, state, action);
+    query = applyPagination(query, state, action);
+    
+    const {total, items} = await api.getRecords(query);
 
+    updatePagination(total, query);
     sampleTable.render(items);
 }
 
@@ -55,7 +59,7 @@ const sampleTable = initTable({
 
 // @todo: инициализация
 
-const applyPagination = initPagination(
+const {applyPagination, updatePagination} = initPagination(
     sampleTable.pagination.elements,
     (el, page, isCurrent) => {
         const input = el.querySelector('input');
@@ -72,7 +76,9 @@ const applySorting = initSorting([
     sampleTable.header.elements.sortByTotal
 ]);
 
-let applyFiltering = (query) => query;
+const { applyFiltering, updateIndexes } = initFiltering(
+    sampleTable.filter.elements
+);
 
 const applySearching = initSearching('query');
 
@@ -80,10 +86,9 @@ const appRoot = document.querySelector('#app');
 appRoot.appendChild(sampleTable.container);
 
 async function init() {
-    const api = initData();
     const indexes = await api.getIndexes();
-    applyFiltering = initFiltering(sampleTable.filter.elements, {
-        searchBySeller: indexes.sellers
+    updateIndexes(sampleTable.filter.elements, {
+        searchBySeller: indexes.sellers,
     });
 }
 

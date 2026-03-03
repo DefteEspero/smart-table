@@ -1,7 +1,4 @@
-import {makeIndex} from "./lib/utils.js";
-
-
-export function initData() {
+export function initData() { 
     const BASE_URL = 'https://webinars.webdev.education-services.ru/sp7-api';
     // переменные для кеширования данных
     let sellers;
@@ -36,17 +33,21 @@ export function initData() {
         const nextQuery = qs.toString(); // и приводим к строковому виду
 
         if (lastQuery === nextQuery && !isUpdated) { // isUpdated параметр нужен, чтобы иметь возможность делать запрос без кеша
-                return lastResult; // если параметры запроса не поменялись, то отдаём сохранённые ранее данные
+            return lastResult; // если параметры запроса не поменялись, то отдаём сохранённые ранее данные
         }
 
         // если прошлый квери не был ранее установлен или поменялись параметры, то запрашиваем данные с сервера
         const response = await fetch(`${BASE_URL}/records?${nextQuery}`);
         const records = await response.json();
 
+        lastQuery = nextQuery;
+        const rawItems = Array.isArray(records) ? records : records?.items ?? [];
+        const total = typeof records?.total === "number" ? records.total : rawItems.length; 
+
         lastQuery = nextQuery; // сохраняем для следующих запросов
         lastResult = {
             total: records.total,
-            items: mapRecords(records.items)
+            items: mapRecords(rawItems)
         };
 
         return lastResult;
