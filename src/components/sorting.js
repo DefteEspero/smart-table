@@ -33,6 +33,12 @@ export function initSorting(columns) {
             const { sort, ...rest } = query || {};
             return rest;я
         }
+
+        if (query.sort === null || query.sort === 'null' || query.sort === '') {
+            const { sort, ...rest } = query;
+            query = rest;
+        }
+        
         // @todo: #3.3 — получить выбранный режим сортировки
         const sort = field && order !== 'none' ? `${field}:${order}` : 'null';
 

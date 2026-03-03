@@ -28,26 +28,27 @@ export const initPagination = ({ pages, fromRow, toRow, totalRows }, createPage)
     const pageTemplate = pages.firstElementChild.cloneNode(true);
     pages.firstElementChild.remove();
 
-    const updatePagination = (total, { page, limit }, query) => {
-        const rowsPerPage = limit;
+    const updatePagination = (total, query) => {
+        const limit = query.limit;
+        const page = query.page;
         pageCount = Math.ceil(total / limit);
 
         const visiablePages = getPages(page, pageCount, 5);
         pages.replaceChildren(...visiablePages.map((pageNumber) => {
             const el = pageTemplate.cloneNode(true);
             return createPage(el, pageNumber, pageNumber === page);
-        }));
+        }));    
 
-        if (query === 0) {
+        if (total === 0) {
             fromRow.textContent = 0;
             toRow.textContent = 0;
             totalRows.textContent = 0;
             pages.replaceChildren();
             return [];
         } else {
-            fromRow.textContent = (page - 1) * rowsPerPage + 1;
-            toRow.textContent = Math.min(page * limit, query);
-            totalRows.textContent = query;
+            fromRow.textContent = (page - 1) * limit;
+            toRow.textContent = Math.min(page * limit, total);
+            totalRows.textContent = total;
         }
     }
 
