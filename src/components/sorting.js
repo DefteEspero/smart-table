@@ -26,7 +26,7 @@ export function initSorting(columns) {
             });
         }
 
-        if (!field || !order === "none") {
+        if (!field || order === "none") {
             const { sort, ...rest } = query || {};
             return rest;
         }

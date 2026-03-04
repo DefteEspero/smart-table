@@ -33,12 +33,8 @@ export function initData() {
 
         const response = await fetch(`${BASE_URL}/records?${nextQuery}`);
         const records = await response.json();
-
-        lastQuery = nextQuery;
         const rawItems = Array.isArray(records) ? records : records?.items ?? [];
-        const total = typeof records?.total === "number" ? records.total : rawItems.length; 
 
-        lastQuery = nextQuery;
         lastResult = {
             total: records.total,
             items: mapRecords(rawItems)
