@@ -7,7 +7,6 @@ export function initSorting(columns) {
         let order = null;
 
         if (action && action.name === 'sort') {
-            // @todo: #3.1 — запомнить выбранный режим сортировки
 
             action.dataset.value = sortMap[action.dataset.value];
             field = action.dataset.field;
@@ -18,8 +17,6 @@ export function initSorting(columns) {
                     column.dataset.value = 'none';
                 }
             });
-
-        // @todo: #3.2 — сбросить сортировки остальных колонок
         } else {
             safeColumns.forEach((column) => {
                 if (column.dataset.value !== 'none') {
@@ -31,7 +28,7 @@ export function initSorting(columns) {
 
         if (!field || !order === "none") {
             const { sort, ...rest } = query || {};
-            return rest;я
+            return rest;
         }
 
         if (query.sort === null || query.sort === 'null' || query.sort === '') {
@@ -39,9 +36,7 @@ export function initSorting(columns) {
             query = rest;
         }
         
-        // @todo: #3.3 — получить выбранный режим сортировки
         const sort = field && order !== 'none' ? `${field}:${order}` : 'null';
-
         return sort ? Object.assign({}, query, { sort }) : query;
     }
 }

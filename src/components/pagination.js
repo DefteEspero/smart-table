@@ -22,9 +22,7 @@ export const initPagination = ({ pages, fromRow, toRow, totalRows }, createPage)
         });
 
     }
-
-    // @todo: #2.3 — подготовить шаблон кнопки для страницы и очистить контейнер
-
+    
     const pageTemplate = pages.firstElementChild.cloneNode(true);
     pages.firstElementChild.remove();
 

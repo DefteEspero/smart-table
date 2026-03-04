@@ -2,13 +2,9 @@ import './fonts/ys-display/fonts.css'
 import './style.css'
 
 import {data as sourceData} from "./data/dataset_1.js";
-
 import {initData} from "./data.js";
 import {processFormData} from "./lib/utils.js";
-
 import {initTable} from "./components/table.js";
-// @todo: подключение
-
 import { initPagination } from "./components/pagination.js";
 import { initSorting } from "./components/sorting.js";
 import { initFiltering } from "./components/filtering.js";
@@ -45,7 +41,6 @@ async function render(action) {
     query = applyPagination(query, state, action);
     
     const {total, items} = await api.getRecords(query);
-
     updatePagination(total, query);
     sampleTable.render(items);
 }
@@ -56,8 +51,6 @@ const sampleTable = initTable({
     before: ['search', 'header', 'filter'],
     after: ['pagination']
 }, render);
-
-// @todo: инициализация
 
 const {applyPagination, updatePagination} = initPagination(
     sampleTable.pagination.elements,
@@ -80,7 +73,7 @@ const { applyFiltering, updateIndexes } = initFiltering(
     sampleTable.filter.elements
 );
 
-const applySearching = initSearching('query');
+const applySearching = initSearching('search');
 
 const appRoot = document.querySelector('#app');
 appRoot.appendChild(sampleTable.container);
