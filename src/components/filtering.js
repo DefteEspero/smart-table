@@ -1,5 +1,4 @@
 export function initFiltering(elements, indexes) {
-
     const updateIndexes = (elements, indexes) => {
         Object.keys(indexes).forEach((elementName) => {
             elements[elementName].append(...Object.values(indexes[elementName]).map(name => {

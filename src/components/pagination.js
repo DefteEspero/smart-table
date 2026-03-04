@@ -1,9 +1,7 @@
 import {getPages} from "../lib/utils.js";
 
 export const initPagination = ({ pages, fromRow, toRow, totalRows }, createPage) => {
-
     let pageCount;
-
     const applyPagination = (query, state, action) => {
         const limit = state.rowsPerPage;
         let page = state.page;
@@ -25,7 +23,6 @@ export const initPagination = ({ pages, fromRow, toRow, totalRows }, createPage)
     
     const pageTemplate = pages.firstElementChild.cloneNode(true);
     pages.firstElementChild.remove();
-
     const updatePagination = (total, query) => {
         const limit = query.limit;
         const page = query.page;
